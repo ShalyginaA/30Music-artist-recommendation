@@ -13,9 +13,9 @@
 
 * Comparison of the two models: [methods_quality_comparison](methods_quality_comparison.ipynb)
 
-* Prepared data for training, validation and testing: [data](data/)
-
 * Helper functions used in the notebooks: [utils](utils/)
+
+To run the code, you have to put 30Music dataset in the folder named ThirtyMusing to re project folder. If you already have standard Pyhton3 libraries for data analysis (for example, Anaconda), you only have to install library [implicit](https://github.com/benfred/implicit) to run the CF notebook and gensim for item2vec. Also pickle module should be installed. T
 
 
 ## Process description
@@ -83,5 +83,8 @@
 * Автоматизировать hyperpatameter tuning
 
 * Попробовать использовать файл relations/love.idomaar (насколько я понимаю, там указано, какие треки пользователь лайкнул). По идее, информация о том, какие треки понравились юзеру, могла бы улучшить качество рекоммендаций.
+
+
+
 
 
