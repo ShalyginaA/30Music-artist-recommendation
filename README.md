@@ -11,6 +11,8 @@
 
 * Stronger model - item2vec embeddings: [item2vec.ipynb](item2vec.ipynb)
 
+* Comparison of the two models: [methods_quality_comparison](methods_quality_comparison.ipynb)
+
 * Prepared data for training, validation and testing: [data](data/)
 
 * Helper functions used in the notebooks: [utils](utils/)
@@ -49,13 +51,34 @@
 
 4. Сравнение моделей и статистическая значимость полученных результатов
 
+### Top-20 similar articts: CF vs item2vec
+Я сравнила средние MAPk, precision, recall для CF и item2vec моделей. Также я сравнила распределения MAPk, precision и recall, полученных для каждого юзера в тест сете. Для сравнения я использовала Mann-Whitney U test, так как он позволяет оценить различия между двумя выборками. Оказалось, что согласно MAPk, recall и precision, collaborative filtering работает лучше для задачи Artist Recommendation чем item2vec.
 
-**Что хотелось бы доделать?**
+Также я сравнила топ-20 похожих исполнителей, полученных с помощью этих двух моделей, для трех исполнителей:
+
+* Ariana Grande
+
+![Similar to Ariana Grande: CF vs item2vec](images/1_joined.jpeg)
+
+* Freddie Mercury
+
+![Similar to Freddie Mercury: CF vs item2vec](images/2_joined.jpeg)
+
+* Mac Miller feat. Action Bronson
+
+![Similar to Mac Miller feat. Action Bronson: CF vs item2vec](images/3_joined.jpeg)
+
+
+Если сравнивать топ-20 исполнителей, полученных с помощью CF и item2vec (human evaluation), то мне кажется, что item2vec работает лучше. 
 
 
 
+#####Что хотелось бы доделать?
 
+* Придумать другой способ валидации, чтобы сравнивать модели, натренированные с разными параметрами (не hit rate)
 
-## Top-20 similar articts: CF vs item2vec
+* Автоматизировать hyperpatameter tuning
+
+* Попробовать использовать файл relations/love.idomaar (насколько я понимаю, там указано, какие треки пользователь лайкнул). По идее, информация о том, какие треки понравились юзеру, могла бы улучшить качество рекоммендаций
 
 
