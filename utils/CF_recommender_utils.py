@@ -45,35 +45,39 @@ def topN_similar_by_vector(artists_vectors_df, aggr_vector, N = 20):
     return list(sim_artists), list(sim_scores)
 
 
-def recommend_by_user(model, left_out_row, user_code_dict, code_person_dict, user_artist_matrix):
+def recommend_by_user(model, left_out_row, user_code_dict, code_person_dict, user_artist_matrix, N=20):
     '''
-    Use ALS CF model to recommend top N items to the given user
+    Recommend the top N items, removing the users own liked items from
+    the results (implicit library do it automatically)
     '''
     user_id = left_out_row['user_id']
     user_code = user_code_dict[user_id]
-    rec = model.recommend(user_code, user_artist_matrix, N=20)
+    rec = model.recommend(user_code, user_artist_matrix, N=N)
     rec_persons = [code_person_dict[code] for (code,score) in rec]
     return rec_persons  
 
+   
 
-def recommend_by_average(test_df, artists_vectors_df, N=20):
+def recommend_by_average(test_df_row, artists_vectors_df, N=20):
     '''
     Custom recommender. Recommend most similar vectors from item factors (vectors)
     using cosine similarity
     '''
-    
-    recommended_artists = []
-    
-    for i, row in test_df.iterrows():
-        persons_lst = row['persons_lst']
-        
-        aggr_v = aggregare_vectors(persons_lst, artists_vectors_df)
-        
-        if len(aggr_v)!=0:
-            aritsts, scores = topN_similar_by_vector(artists_vectors_df, aggr_v, N=N)
-        
-            recommended_artists.append(aritsts)
-        else:
-            recommended_artists.append([])
-    return recommended_artists 
+    persons_lst = test_df_row['persons_lst']
+
+    aggr_v = aggregare_vectors(persons_lst, artists_vectors_df)
+
+    N = len(set(persons_lst))+N
+
+    if len(aggr_v)!=0:
+        artists, scores = topN_similar_by_vector(artists_vectors_df, aggr_v, N=N)
+        artists_new = []
+
+        for ar in artists:
+            if ar not in set(persons_lst):
+                artists_new.append(ar)                              
+        return(artists_new[:20])
+    else:
+        return([])
+
     

@@ -1,13 +1,13 @@
 import numpy as np
 
-def get_similar_artists(model, artist_vector, people_dict, n = 20):
+def get_similar_artists(model, artist_vector, people_dict, N = 20):
     '''
     Get top-N artists similar by vector to artist_vector
     '''
     
-    # extract most similar products for the input vector
+    # extract most similar artists for the input vector
     try:
-        most_sim = model.similar_by_vector(artist_vector, topn = n+1)[1:]
+        most_sim = model.similar_by_vector(artist_vector, topn = N+1)[1:]
     except ValueError:
         return [], []
 
@@ -52,16 +52,29 @@ def recommend(model, df_grouped, people_dict):
     '''
     top_20_recommended_names = []
     top_20_recommended_ids = []
+    
     for i, row in df_grouped.iterrows():
         user_id = row['user_id']
         persons_lst = row['persons_lst']
         
         persons_aggr = aggregate_vectors(model, persons_lst)
         
-        names, ids = get_similar_artists(model, persons_aggr, people_dict)
+        persons_lst_len = len(set(persons_lst))
         
-        top_20_recommended_names.append(names)
-        top_20_recommended_ids.append(ids)
+        N = 20 + persons_lst_len
+        
+        names, ids = get_similar_artists(model, persons_aggr, people_dict, N=N)
+        
+        rec_names = [] 
+        rec_ids = []
+        
+        for n, i in zip(names, ids):
+            if i not in set(persons_lst):
+                rec_names.append(n)
+                rec_ids.append(i)
+        
+        top_20_recommended_names.append(rec_names[:20])
+        top_20_recommended_ids.append(rec_ids[:20])
         
     return top_20_recommended_names, top_20_recommended_ids  
 
